@@ -56,11 +56,13 @@ void draw_dot(cairo_t *cr, point_t p, int line_width, int radius, color_t line_c
 void draw_vector(cairo_t *cr, vector_t v, int width, color_t color);
 void write_text(cairo_t *cr, point_t p, color_t color, char str[], int font_size);
 cairo_objects_t init_cairo(void);
-extern const colors_t COLORS_s;
 
+
+extern const colors_t COLORS_s;
 extern struct cairo_settings_s {
         fpoint_t scale;
         point_t offset;
+        float alpha;
 } CAIRO_SETTINGS_s;
 
 

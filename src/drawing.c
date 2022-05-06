@@ -49,6 +49,7 @@ cairo_objects_t init_cairo(void)
         cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2560, 1440);
         cairo_t *cr = cairo_create(surface);
 
+        cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);                                  // Antialias
         cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);           // Change filter
         cairo_move_to(cr, 0, 0);                                                        // Set origin
 
@@ -67,4 +68,7 @@ const colors_t COLORS_s = {.black  = {CVC(0x00), CVC(0x00), CVC(0x00)},
                            .yellow = {CVC(0xFF), CVC(0xFF), CVC(0x00)},
 };
 
-struct cairo_settings_s CAIRO_SETTINGS_s = {.scale=(fpoint_t){.x = 1.0f, .y = 1.0f}, .offset=(point_t){.x = 0, .y = 0}};
+struct cairo_settings_s CAIRO_SETTINGS_s = {.scale  = (fpoint_t){.x = 1.0f, .y = 1.0f},
+                                            .offset = (point_t){.x = 0, .y = 0},
+                                            .alpha  = 1.0f,
+};

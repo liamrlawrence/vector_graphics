@@ -18,8 +18,9 @@ static color_t str2color(char str[8]);
 void read_input(cairo_t *cr, subway_t *subway, char filename[64])
 {
         typedef enum {
-                NONE = -4,
-                OFFSET = -3,
+                NONE = -5,
+                OFFSET = -4,
+                ALPHA = -3,
                 BACKGROUND = -2,
                 SCALE = -1,
                 TEXT,
@@ -64,6 +65,8 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[64])
                                 command = STOP;
                         else if (strncmp(buffer, "[OFFSET]", 8) == 0)
                                 command = OFFSET;
+                        else if (strncmp(buffer, "[ALPHA]", 7) == 0)
+                                command = ALPHA;
                         else if (strncmp(buffer, "[BACKGROUND]", 12) == 0)
                                 command = BACKGROUND;
                         else if (strncmp(buffer, "[SCALE]", 7) == 0)
@@ -98,6 +101,7 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[64])
                                 break;
 
                         case OFFSET:
+                        case ALPHA:
                         case BACKGROUND:
                         case SCALE:
                                 break;
@@ -139,6 +143,8 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[64])
                                 command = STOP;
                         else if (strncmp(buffer, "[OFFSET]", 8) == 0)
                                 command = OFFSET;
+                        else if (strncmp(buffer, "[ALPHA]", 7) == 0)
+                                command = ALPHA;
                         else if (strncmp(buffer, "[BACKGROUND]", 12) == 0)
                                 command = BACKGROUND;
                         else if (strncmp(buffer, "[SCALE]", 7) == 0)
@@ -205,6 +211,10 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[64])
                                                         CAIRO_SETTINGS_s.offset.y);     // from the end user's perspective
                                         break;
 
+                                case ALPHA:
+                                        sscanf(buffer, "(%f)\n", &CAIRO_SETTINGS_s.alpha);
+                                        break;
+
                                 case BACKGROUND:
                                         sscanf(buffer, "(%f, %f, %f)\n", &color_buf.r, &color_buf.g, &color_buf.b);
                                         if (color_buf.r > 1.0 || color_buf.g > 1.0 || color_buf.b > 1.0) {
@@ -212,7 +222,7 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[64])
                                                 color_buf.g = CVC(color_buf.g);
                                                 color_buf.b = CVC(color_buf.b);
                                         }
-                                        cairo_set_source_rgb(cr, color_buf.r, color_buf.g, color_buf.b);
+                                        cairo_set_source_rgba(cr, color_buf.r, color_buf.g, color_buf.b, CAIRO_SETTINGS_s.alpha);
                                         cairo_paint(cr);
                                         break;
 
