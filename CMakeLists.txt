@@ -4,5 +4,5 @@ project(vector_graphics C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-O3 -I/usr/include/cairo/ -L/usr/local/lib/ -lcairo")
 
-add_executable(nether_subway src/main.c src/drawing.c src/drawing.h src/subway.c src/subway.h)
+add_executable(vector_graphics src/main.c src/drawing.c src/drawing.h src/subway.c src/subway.h)
 target_link_libraries(vector_graphics cairo)
