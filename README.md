@@ -170,7 +170,7 @@ Arguments:
 (-50, 275) radius=26 line_width=18 line_color=BLACK fill_color=BLUE label="Blue Station" (-105, 335) font_size=16
 ```
 
-A label can also be turned off by setting the font_size=`0` or by making label=`""`.
+A label can be turned off by setting `font_size=0` or `label=""`.
 
 
 
