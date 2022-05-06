@@ -270,7 +270,6 @@ void render_subway(cairo_t *cr, subway_t *subway)
 
         // Render stations
         for (int i = 0; i < subway->nstations; i++) {
-
                 draw_dot(
                         cr,
                         (point_t){.x = subway->stations[i].p.x, .y = subway->stations[i].p.y},
@@ -282,7 +281,6 @@ void render_subway(cairo_t *cr, subway_t *subway)
 
         // Render stops
         for (int i = 0; i < subway->nstops; i++) {
-
                 draw_dot(
                         cr,
                         (point_t){.x = subway->stops[i].p.x, .y = subway->stops[i].p.y},
