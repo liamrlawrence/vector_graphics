@@ -7,8 +7,10 @@
 
 #include "drawing.h"
 
-
+#define NUM_DRAW_COMMANDS    4
 #define TEXT_BUF_SIZE   128
+
+
 
 typedef struct {
         point_t p;
@@ -62,6 +64,11 @@ typedef struct {
         int nlines;
         int nstops;
 } subway_t;
+
+
+
+void read_input(cairo_t *cr, subway_t *subway, char filename[64]);
+void render_subway(cairo_t *cr, subway_t *subway);
 
 
 #endif //NETHER_SUBWAY_SUBWAY_H

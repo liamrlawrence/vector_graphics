@@ -1,50 +1,22 @@
+//
+// Created by liam on 5/5/22.
+//
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
 #include "subway.h"
-#include "drawing.h"
-
-#define NUM_DRAW_COMMANDS    4
-#define CVTCOLOR(n)         (((float)(n))/255)
 
 
-color_t str2color(char str[8])
+// Function definitions //
+static color_t str2color(char str[8]);
+
+
+
+// Read input from file
+void read_input(cairo_t *cr, subway_t *subway, char filename[64])
 {
-        if (strncmp(str, "BLACK", 5) == 0)
-                return COLORS_s.black;
-        else if (strncmp(str, "SILVER", 6) == 0)
-                return COLORS_s.silver;
-        else if (strncmp(str, "WHITE", 5) == 0)
-                return COLORS_s.white;
-        else if (strncmp(str, "RED", 3) == 0)
-                return COLORS_s.red;
-        else if (strncmp(str, "BLUE", 4) == 0)
-                return COLORS_s.blue;
-        else if (strncmp(str, "GREEN", 5) == 0)
-                return COLORS_s.green;
-        else if (strncmp(str, "YELLOW", 6) == 0)
-                return COLORS_s.yellow;
-
-        printf("Error unknown color: %s\n", str);
-        exit(1);
-}
-
-
-void read_input(cairo_t *cr, subway_t *subway)
-{
-        FILE *fp = fopen("../subway.txt", "r");
-        size_t bufsize = TEXT_BUF_SIZE;
-        char *buffer;
-
-        // Initialize buffer
-        buffer = (char *)malloc(bufsize * sizeof(char));
-        if(buffer == NULL) {
-                perror("Unable to allocate buffer");
-                exit(1);
-        }
-
-
         typedef enum {
                 NONE = -4,
                 OFFSET = -3,
@@ -58,7 +30,20 @@ void read_input(cairo_t *cr, subway_t *subway)
         commands_e command = NONE;
         int cmd_cnt[NUM_DRAW_COMMANDS] = {0};
 
-        // Calculate the number of objects that need to be created
+        FILE *fp = fopen(filename, "r");
+        size_t bufsize = TEXT_BUF_SIZE;
+        char *buffer;
+
+
+        // Initialize buffer
+        buffer = (char *)malloc(bufsize * sizeof(char));
+        if(buffer == NULL) {
+                perror("Unable to allocate buffer");
+                exit(1);
+        }
+
+
+        // Calculate the memory required for malloc
         while (getline(&buffer, &bufsize, fp) != EOF) {
                 if (buffer[0] == '#') {
                         continue;
@@ -68,7 +53,7 @@ void read_input(cairo_t *cr, subway_t *subway)
                         continue;
                 }
 
-                if (buffer[0] == '[' || command == NONE) {
+                if (buffer[0] == '[') {
                         if (strncmp(buffer, "[TEXT]", 6) == 0)
                                 command = TEXT;
                         else if (strncmp(buffer, "[STATION]", 9) == 0)
@@ -87,7 +72,7 @@ void read_input(cairo_t *cr, subway_t *subway)
                                 printf("Error malformed line: %s\n", buffer);
                                 exit(1);
                         }
-                } else {
+                } else if (command >= 0) {
                         cmd_cnt[command]++;
                 }
         }
@@ -124,7 +109,7 @@ void read_input(cairo_t *cr, subway_t *subway)
         }
 
 
-        // Run the commands
+        // Run commands
         text_t *text_ptr = NULL;
         station_t *station_ptr = NULL;
         line_t *line_ptr = NULL;
@@ -143,7 +128,7 @@ void read_input(cairo_t *cr, subway_t *subway)
                         continue;
                 }
 
-                if (buffer[0] == '[' || command == NONE) {
+                if (buffer[0] == '[') {
                         if (strncmp(buffer, "[TEXT]", 6) == 0)
                                 command = TEXT;
                         else if (strncmp(buffer, "[STATION]", 9) == 0)
@@ -176,13 +161,13 @@ void read_input(cairo_t *cr, subway_t *subway)
                                 case STATION:
                                         station_ptr = &subway->stations[subway->nstations++];
                                         sscanf(buffer,
-                                              "(%d, %d) radius=%d line_width=%d line_color=%s fill_color=%s label=\"%49[^\"]\" (%d, %d) font_size=%d\n",
-                                              &station_ptr->p.x, &station_ptr->p.y,
-                                              &station_ptr->radius, &station_ptr->line_width,
-                                              color1_buf, color2_buf,
-                                              station_ptr->label,
-                                              &station_ptr->lp.x, &station_ptr->lp.y,
-                                              &station_ptr->font_size);
+                                               "(%d, %d) radius=%d line_width=%d line_color=%s fill_color=%s label=\"%49[^\"]\" (%d, %d) font_size=%d\n",
+                                               &station_ptr->p.x, &station_ptr->p.y,
+                                               &station_ptr->radius, &station_ptr->line_width,
+                                               color1_buf, color2_buf,
+                                               station_ptr->label,
+                                               &station_ptr->lp.x, &station_ptr->lp.y,
+                                               &station_ptr->font_size);
                                         station_ptr->line_color = str2color(color1_buf);
                                         station_ptr->fill_color = str2color(color2_buf);
                                         break;
@@ -216,16 +201,16 @@ void read_input(cairo_t *cr, subway_t *subway)
                                 case OFFSET:
                                         sscanf(buffer, "(%d, %d)\n", &CAIRO_SETTINGS_s.offset.x, &CAIRO_SETTINGS_s.offset.y);
                                         cairo_translate(cr,
-                                                        CAIRO_SETTINGS_s.offset.x,// * CAIRO_SETTINGS_s.scale.x,
-                                                        CAIRO_SETTINGS_s.offset.y);// * CAIRO_SETTINGS_s.scale.y);
+                                                        CAIRO_SETTINGS_s.offset.x,      // Used to scale these, was too tricky
+                                                        CAIRO_SETTINGS_s.offset.y);     // from the end user's perspective
                                         break;
 
                                 case BACKGROUND:
                                         sscanf(buffer, "(%f, %f, %f)\n", &color_buf.r, &color_buf.g, &color_buf.b);
                                         if (color_buf.r > 1.0 || color_buf.g > 1.0 || color_buf.b > 1.0) {
-                                                color_buf.r = CVTCOLOR(color_buf.r);
-                                                color_buf.g = CVTCOLOR(color_buf.g);
-                                                color_buf.b = CVTCOLOR(color_buf.b);
+                                                color_buf.r = CVC(color_buf.r);
+                                                color_buf.g = CVC(color_buf.g);
+                                                color_buf.b = CVC(color_buf.b);
                                         }
                                         cairo_set_source_rgb(cr, color_buf.r, color_buf.g, color_buf.b);
                                         cairo_paint(cr);
@@ -235,7 +220,6 @@ void read_input(cairo_t *cr, subway_t *subway)
                                         sscanf(buffer, "(%f, %f)\n", &CAIRO_SETTINGS_s.scale.x, &CAIRO_SETTINGS_s.scale.y);
                                         break;
 
-
                                 default:
                                         printf("Error code %d in function: void read_input(subway_t *subway);", command);
                                         exit(1);
@@ -243,22 +227,17 @@ void read_input(cairo_t *cr, subway_t *subway)
                 }
         }
 
-
-        // Cleanup memory and return
+        // Cleanup memory
         free(buffer);
         return;
 }
 
 
+
+// Draw all text and shapes to the Cairo surface
 void render_subway(cairo_t *cr, subway_t *subway)
 {
-//        cairo_set_source_rgb(cr, 0.4, 0.4, 0.4);
-//        cairo_set_line_width(cr, 1);
-//        cairo_rectangle(cr, 1280, 1020, -400, -400);
-//        cairo_stroke_preserve(cr);
-//        cairo_fill(cr);
-
-        // Render Text
+        // Render text
         for (int i = 0; i < subway->ntexts; i++)
                 write_text(cr, (point_t){.x = subway->texts[i].p.x, .
                 y = subway->texts[i].p.y}, subway->texts[i].color, subway->texts[i].text, subway->texts[i].font_size);
@@ -269,13 +248,12 @@ void render_subway(cairo_t *cr, subway_t *subway)
         for (int i = 0; i < subway->nstops; i++)
                 write_text(cr, (point_t){.x = subway->stops[i].lp.x, .y = subway->stops[i].lp.y}, COLORS_s.black, subway->stops[i].label, subway->stops[i].font_size);
 
-
         // Render lines
         for (int i = 0; i < subway->nlines; i++) {
                 draw_vector(
                         cr,
                         (vector_t){.p1 = (point_t){.x = subway->lines[i].v.p1.x, .y = subway->lines[i].v.p1.y},
-                                   .p2 = (point_t){.x = subway->lines[i].v.p2.x, .y = subway->lines[i].v.p2.y}},
+                                .p2 = (point_t){.x = subway->lines[i].v.p2.x, .y = subway->lines[i].v.p2.y}},
                         subway->lines[i].width,
                         subway->lines[i].color);
         }
@@ -306,22 +284,25 @@ void render_subway(cairo_t *cr, subway_t *subway)
 }
 
 
-int main (void)
+
+// Helper functions //
+static color_t str2color(char str[8])
 {
-        // Init
-        cairo_objects_t co = init_cairo();
-        cairo_t *cr = *co.cr;
-        cairo_surface_t *surface = *co.surface;
-        subway_t subway = {NULL, NULL, NULL, NULL, 0, 0, 0, 0};
+        if (strncmp(str, "BLACK", 5) == 0)
+                return COLORS_s.black;
+        else if (strncmp(str, "SILVER", 6) == 0)
+                return COLORS_s.silver;
+        else if (strncmp(str, "WHITE", 5) == 0)
+                return COLORS_s.white;
+        else if (strncmp(str, "RED", 3) == 0)
+                return COLORS_s.red;
+        else if (strncmp(str, "BLUE", 4) == 0)
+                return COLORS_s.blue;
+        else if (strncmp(str, "GREEN", 5) == 0)
+                return COLORS_s.green;
+        else if (strncmp(str, "YELLOW", 6) == 0)
+                return COLORS_s.yellow;
 
-        // Read input and render image
-        read_input(cr, &subway);
-        render_subway(cr, &subway);
-
-        // Save the image to the disk
-        cairo_destroy(cr);
-        cairo_surface_write_to_png(surface, "hello.png");
-        cairo_surface_destroy(surface);
-
-        return 0;
+        printf("Error unknown color: %s\n", str);
+        exit(1);
 }

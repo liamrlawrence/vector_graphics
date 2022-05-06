@@ -8,6 +8,8 @@
 #include <math.h>
 #include <cairo.h>
 
+#define CVC(n)          (((float)(n)/255))      // Convert Color
+
 
 
 typedef struct {
@@ -46,6 +48,7 @@ typedef struct {
         point_t p1;
         point_t p2;
 } vector_t;
+
 
 
 
