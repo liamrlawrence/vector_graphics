@@ -5,8 +5,8 @@
 
 int main (int argc, char **argv)
 {
-        if (argc != 2) {
-                printf("Error there should be exactly one argument, got %d", argc-1);
+        if (argc != 3) {
+                printf("Error there should be exactly two arguments, got %d\n", argc-1);
                 exit(1);
         }
 
@@ -22,7 +22,7 @@ int main (int argc, char **argv)
 
         // Save the image to the disk
         cairo_destroy(cr);
-        cairo_surface_write_to_png(surface, "hello.png");
+        cairo_surface_write_to_png(surface, argv[2]);
         cairo_surface_destroy(surface);
 
         return 0;
