@@ -15,7 +15,7 @@ static color_t str2color(char str[8]);
 
 
 // Read input from file
-void read_input(cairo_t *cr, subway_t *subway, char filename[64])
+void read_input(cairo_t *cr, subway_t *subway, char filename[256])
 {
         typedef enum {
                 NONE = -5,

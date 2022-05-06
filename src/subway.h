@@ -67,7 +67,7 @@ typedef struct {
 
 
 
-void read_input(cairo_t *cr, subway_t *subway, char filename[64]);
+void read_input(cairo_t *cr, subway_t *subway, char filename[256]);
 void render_subway(cairo_t *cr, subway_t *subway);
 
 
