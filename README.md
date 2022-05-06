@@ -155,3 +155,8 @@ Arguments:
 ```
 
 A label can also be turned off by setting the font_size=`0` or by making label=`""`.
+
+
+
+## Known Issues:
+Running the program in a Docker container after compiling with `-O3` will cause a segfault, unknown cause.
