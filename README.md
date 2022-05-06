@@ -25,6 +25,22 @@ YELLOW = {0xFF, 0xFF, 0x00}
 
 # Commands
 
+When calling a command, it should be on its own line in the format `[COMAND]`.
+
+### Grouping commands
+Multiple of the same command can be run together by having them be on consecutive lines, they can be separated by comments but ***never*** a blank line.
+```hs
+[COMMAND]
+(x1, y1) param_a=1 param_b=2
+(x2, y2) param_a=3 param_b=4
+# You can insert comments between commands
+(x3, y3) param_a=5 param_b=6
+
+# ^^ But you CANNOT have a blank line! ^^
+# VV--------- This will fail! ---------VV
+(x4, y4) param_a=6 paramb_7
+```
+
 ### [ALPHA]
 
 Sets the transparency level of the background on a scale of (0.0 - 1.0), where 0 is 100% transparent and 1 is opaque.
