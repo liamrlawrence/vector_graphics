@@ -253,7 +253,7 @@ void render_subway(cairo_t *cr, subway_t *subway)
                 draw_vector(
                         cr,
                         (vector_t){.p1 = (point_t){.x = subway->lines[i].v.p1.x, .y = subway->lines[i].v.p1.y},
-                                .p2 = (point_t){.x = subway->lines[i].v.p2.x, .y = subway->lines[i].v.p2.y}},
+                                   .p2 = (point_t){.x = subway->lines[i].v.p2.x, .y = subway->lines[i].v.p2.y}},
                         subway->lines[i].width,
                         subway->lines[i].color);
         }
