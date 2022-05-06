@@ -4,7 +4,7 @@
 ### Explicit Color Values
 When a command needs an explicit color value (such as [BACKGROUND]), the format can either be 
 
-`(f, f, f) where f is a decimal number between 0.0 - 1.0`
+`(f, f, f) where f is a float between 0.0 - 1.0`
 
 or
 
