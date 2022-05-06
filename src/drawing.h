@@ -29,8 +29,8 @@ typedef struct {
 } colors_t;
 
 typedef struct {
-        cairo_surface_t **surface;
-        cairo_t **cr;
+        cairo_surface_t *surface;
+        cairo_t *cr;
 } cairo_objects_t;
 
 typedef struct {

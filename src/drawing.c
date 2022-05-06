@@ -46,14 +46,15 @@ void write_text(cairo_t *cr, point_t p, color_t color, char str[], int font_size
 cairo_objects_t init_cairo(void)
 {
         // Create cairo surface
-        cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2560, 1440);
-        cairo_t *cr = cairo_create(surface);
+        cairo_objects_t co;
+        co.surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2560, 1440);
+        co.cr = cairo_create(co.surface);
 
-        cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);                                  // Antialias
-        cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);           // Change filter
-        cairo_move_to(cr, 0, 0);                                                        // Set origin
+        cairo_set_antialias(co.cr, CAIRO_ANTIALIAS_BEST);                                  // Antialias
+        cairo_pattern_set_filter(cairo_get_source(co.cr), CAIRO_FILTER_NEAREST);           // Change filter
+        cairo_move_to(co.cr, 0, 0);                                                        // Set origin
 
-        return (cairo_objects_t){.surface = &surface, .cr = &cr};
+        return co;
 }
 
 

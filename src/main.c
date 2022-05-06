@@ -12,18 +12,17 @@ int main (int argc, char **argv)
 
         // Init
         cairo_objects_t co = init_cairo();
-        cairo_t *cr = *co.cr;
-        cairo_surface_t *surface = *co.surface;
         subway_t subway = {NULL, NULL, NULL, NULL, 0, 0, 0, 0};
 
-        // Read input and render image
-        read_input(cr, &subway, argv[1]);
-        render_subway(cr, &subway);
+        // Read input and render the image
+        read_input(co.cr, &subway, argv[1]);
+        render_subway(co.cr, &subway);
+        free_subway(&subway);
 
         // Save the image to the disk
-        cairo_destroy(cr);
-        cairo_surface_write_to_png(surface, argv[2]);
-        cairo_surface_destroy(surface);
-
+        cairo_destroy(co.cr);
+        cairo_surface_write_to_png(co.surface, argv[2]);
+        cairo_surface_destroy(co.surface);
+        cairo_debug_reset_static_data();
         return 0;
 }

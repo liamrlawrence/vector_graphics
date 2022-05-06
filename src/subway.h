@@ -7,8 +7,8 @@
 
 #include "drawing.h"
 
-#define NUM_DRAW_COMMANDS    4
-#define TEXT_BUF_SIZE   128
+#define NUM_DRAW_COMMANDS       4
+#define TEXT_BUF_SIZE           128
 
 
 
@@ -69,6 +69,7 @@ typedef struct {
 
 void read_input(cairo_t *cr, subway_t *subway, char filename[256]);
 void render_subway(cairo_t *cr, subway_t *subway);
+void free_subway(subway_t *subway);
 
 
 #endif //NETHER_SUBWAY_SUBWAY_H

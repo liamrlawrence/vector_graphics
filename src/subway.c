@@ -13,21 +13,23 @@
 static color_t str2color(char str[8]);
 
 
+// Static Structs //
+typedef enum {
+        NONE = -5,
+        OFFSET = -4,
+        ALPHA = -3,
+        BACKGROUND = -2,
+        SCALE = -1,
+        TEXT,
+        STATION,
+        LINE,
+        STOP,
+} commands_e;
+
 
 // Read input from file
 void read_input(cairo_t *cr, subway_t *subway, char filename[256])
 {
-        typedef enum {
-                NONE = -5,
-                OFFSET = -4,
-                ALPHA = -3,
-                BACKGROUND = -2,
-                SCALE = -1,
-                TEXT,
-                STATION,
-                LINE,
-                STOP,
-        } commands_e;
         commands_e command = NONE;
         int cmd_cnt[NUM_DRAW_COMMANDS] = {0};
 
@@ -37,7 +39,7 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[256])
 
 
         // Initialize buffer
-        buffer = (char *)malloc(bufsize * sizeof(char));
+        buffer = (char *)malloc(sizeof(char) * bufsize);
         if(buffer == NULL) {
                 perror("Unable to allocate buffer");
                 exit(1);
@@ -85,19 +87,35 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[256])
         for (int i = 0; i < NUM_DRAW_COMMANDS; i++) {
                 switch ((commands_e)i) {
                         case TEXT:
-                                subway->texts = malloc(sizeof(text_t) * cmd_cnt[TEXT]);
+                                subway->texts = (text_t *)malloc(sizeof(text_t) * cmd_cnt[TEXT]);
+                                if(subway->texts == NULL) {
+                                        perror("Unable to allocate buffer subway->texts");
+                                        exit(1);
+                                }
                                 break;
 
                         case STATION:
-                                subway->stations = malloc(sizeof(station_t) * cmd_cnt[STATION]);
+                                subway->stations = (station_t *)malloc(sizeof(station_t) * cmd_cnt[STATION]);
+                                if(subway->stations == NULL) {
+                                        perror("Unable to allocate buffer subway->stations");
+                                        exit(1);
+                                }
                                 break;
 
                         case LINE:
-                                subway->lines = malloc(sizeof(line_t) * cmd_cnt[LINE]);
+                                subway->lines = (line_t *)malloc(sizeof(line_t) * cmd_cnt[LINE]);
+                                if(subway->lines == NULL) {
+                                        perror("Unable to allocate buffer subway->lines");
+                                        exit(1);
+                                }
                                 break;
 
                         case STOP:
-                                subway->stops = malloc(sizeof(stop_t) * cmd_cnt[STOP]);
+                                subway->stops = (stop_t *)malloc(sizeof(stop_t) * cmd_cnt[STOP]);
+                                if(subway->stops == NULL) {
+                                        perror("Unable to allocate buffer subway->stops");
+                                        exit(1);
+                                }
                                 break;
 
                         case OFFSET:
@@ -238,10 +256,9 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[256])
         }
 
         // Cleanup memory
+        fclose(fp);
         free(buffer);
-        return;
 }
-
 
 
 // Draw all text and shapes to the Cairo surface
@@ -249,8 +266,7 @@ void render_subway(cairo_t *cr, subway_t *subway)
 {
         // Render text
         for (int i = 0; i < subway->ntexts; i++)
-                write_text(cr, (point_t){.x = subway->texts[i].p.x, .
-                y = subway->texts[i].p.y}, subway->texts[i].color, subway->texts[i].text, subway->texts[i].font_size);
+                write_text(cr, (point_t){.x = subway->texts[i].p.x, .y = subway->texts[i].p.y}, subway->texts[i].color, subway->texts[i].text, subway->texts[i].font_size);
         for (int i = 0; i < subway->nstations; i++)
                 write_text(cr, (point_t){.x = subway->stations[i].lp.x, .y = subway->stations[i].lp.y}, COLORS_s.black, subway->stations[i].label, subway->stations[i].font_size);
         for (int i = 0; i < subway->nlines; i++)
@@ -290,6 +306,41 @@ void render_subway(cairo_t *cr, subway_t *subway)
                         subway->stops[i].fill_color);
         }
 }
+
+
+void free_subway(subway_t *subway)
+{
+        for (int i = 0; i < NUM_DRAW_COMMANDS; i++) {
+                switch ((commands_e)i) {
+                        case TEXT:
+                                free(subway->texts);
+                                break;
+
+                        case STATION:
+                                free(subway->stations);
+                                break;
+
+                        case LINE:
+                                free(subway->lines);
+                                break;
+
+                        case STOP:
+                                free(subway->stops);
+                                break;
+
+                        case OFFSET:
+                        case ALPHA:
+                        case BACKGROUND:
+                        case SCALE:
+                                break;
+
+                        default:
+                                printf("Error code %d in function: void free_subway(subway_t *subway);", i);
+                                exit(1);
+                }
+        }
+}
+
 
 
 
