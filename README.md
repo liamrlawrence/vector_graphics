@@ -85,6 +85,7 @@ Arguments:
 ```
 
 
+
 ### [TEXT]
 
 Write text to the image - Be aware that the current limit is 128 characters per [TEXT] command.
@@ -99,6 +100,7 @@ Arguments:
 [TEXT]
 (10, 50) "Hello, World!" color=BLUE font_size=18
 ```
+
 
 
 ### [STATION] / [STOP]
@@ -118,6 +120,7 @@ fill_color=YELLOW
 ```
 
 
+
 ### [LINE]
 
 Draws a vector between two points.
@@ -135,11 +138,12 @@ Arguments:
 ```
 
 
+
 ## The label argument
 
-There is an optional set of arguments available for [STOP], [STATION], and [LINE] that allow you to immediately create a label for the object you're drawing. These arguments ***must*** come at the end of your command.
+There is an optional set of arguments available for [STOP], [STATION], and [LINE] that allow you to immediately create a label for the object you're drawing. These arguments ***must*** come at the end of the command.
 
-Please note, a label's color is always BLACK.
+Please note, a label's color is always `BLACK`.
 
 Arguments:
 `label="Label Name" (label x, label y) font_size=n`
@@ -150,4 +154,4 @@ Arguments:
 (-50, 275) radius=26 line_width=18 line_color=BLACK fill_color=BLUE label="Blue Station" (-105, 335) font_size=16
 ```
 
-A label can also be turned off by setting the font_size equal to 0 or by making label=`""`.
+A label can also be turned off by setting the font_size=`0` or by making label=`""`.
