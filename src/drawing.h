@@ -2,8 +2,8 @@
 // Created by liam on 5/5/22.
 //
 
-#ifndef NETHER_SUBWAY_DRAWING_H
-#define NETHER_SUBWAY_DRAWING_H
+#ifndef VG_DRAWING_H
+#define VG_DRAWING_H
 
 #include <math.h>
 #include <cairo.h>
@@ -66,4 +66,4 @@ extern struct cairo_settings_s {
 } CAIRO_SETTINGS_s;
 
 
-#endif //NETHER_SUBWAY_DRAWING_H
+#endif //VG_DRAWING_H

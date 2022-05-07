@@ -125,20 +125,20 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[256])
                                 break;
 
                         default:
-                                printf("Error code %d in function: void read_input(subway_t *subway);", i);
+                                printf("Error code %d in function: void read_input();", i);
                                 exit(1);
                 }
         }
 
 
-        // Run commands
+        // Process commands
         text_t *text_ptr = NULL;
         station_t *station_ptr = NULL;
         line_t *line_ptr = NULL;
         stop_t *stop_ptr = NULL;
+        color_t color_buf = {0};
         char color1_buf[8] = "";
         char color2_buf[8] = "";
-        color_t color_buf = {0};
         rewind(fp);
         command = NONE;
         while (getline(&buffer, &bufsize, fp) != EOF) {
@@ -249,7 +249,7 @@ void read_input(cairo_t *cr, subway_t *subway, char filename[256])
                                         break;
 
                                 default:
-                                        printf("Error code %d in function: void read_input(subway_t *subway);", command);
+                                        printf("Error code %d in function: void read_input();", command);
                                         exit(1);
                         }
                 }
@@ -308,6 +308,7 @@ void render_subway(cairo_t *cr, subway_t *subway)
 }
 
 
+// Free Subway's allocated memory
 void free_subway(subway_t *subway)
 {
         for (int i = 0; i < NUM_DRAW_COMMANDS; i++) {
@@ -335,12 +336,11 @@ void free_subway(subway_t *subway)
                                 break;
 
                         default:
-                                printf("Error code %d in function: void free_subway(subway_t *subway);", i);
+                                printf("Error code %d in function: void free_subway();", i);
                                 exit(1);
                 }
         }
 }
-
 
 
 

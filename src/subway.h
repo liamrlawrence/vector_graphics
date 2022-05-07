@@ -2,8 +2,8 @@
 // Created by liam on 5/5/22.
 //
 
-#ifndef NETHER_SUBWAY_SUBWAY_H
-#define NETHER_SUBWAY_SUBWAY_H
+#ifndef VG_SUBWAY_H
+#define VG_SUBWAY_H
 
 #include "drawing.h"
 
@@ -72,4 +72,4 @@ void render_subway(cairo_t *cr, subway_t *subway);
 void free_subway(subway_t *subway);
 
 
-#endif //NETHER_SUBWAY_SUBWAY_H
+#endif //VG_SUBWAY_H
