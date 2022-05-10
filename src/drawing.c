@@ -66,7 +66,7 @@ const colors_t COLORS_s = {.black  = {CVC(0x00), CVC(0x00), CVC(0x00)},
                            .red    = {CVC(0xFF), CVC(0x00), CVC(0x00)},
                            .blue   = {CVC(0x00), CVC(0x00), CVC(0xFF)},
                            .green  = {CVC(0x00), CVC(0xFF), CVC(0x00)},
-                           .yellow = {CVC(0xFF), CVC(0xFF), CVC(0x00)},
+                           .yellow = {CVC(0xFF), CVC(0xDC), CVC(0x64)},
 };
 
 struct cairo_settings_s CAIRO_SETTINGS_s = {.scale  = (fpoint_t){.x = 1.0f, .y = 1.0f},
